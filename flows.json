@@ -2,7 +2,7 @@
     {
         "id": "b6c49126b53c3f19",
         "type": "tab",
-        "label": "Flow 3",
+        "label": "MeldungErstellen",
         "disabled": false,
         "info": "",
         "env": []
@@ -10,7 +10,7 @@
     {
         "id": "89825a0049521b38",
         "type": "tab",
-        "label": "Flow 5",
+        "label": "MeldungSichten",
         "disabled": false,
         "info": "",
         "env": []
@@ -143,7 +143,21 @@
     {
         "id": "8cfee7582093513a",
         "type": "ui-group",
-        "name": "Sichten",
+        "name": "Description",
+        "page": "439b1ef45daa8130",
+        "width": 6,
+        "height": 1,
+        "order": 2,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "c2965404f06022d6",
+        "type": "ui-group",
+        "name": "Meldung sichten",
         "page": "439b1ef45daa8130",
         "width": 6,
         "height": 1,
@@ -295,41 +309,291 @@
         "wires": []
     },
     {
-        "id": "6a5736d42f3b5252",
-        "type": "ui-form",
+        "id": "dcfd6f5032a35659",
+        "type": "ui-text",
         "z": "89825a0049521b38",
-        "name": "Sichten !",
         "group": "8cfee7582093513a",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-left",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": true,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 990,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "b9152c0be0023ef5",
+        "type": "function",
+        "z": "89825a0049521b38",
+        "name": "function 2",
+        "func": "msg.method = \"GET\";\nmsg.url = \"http://localhost:8000/messages\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 240,
+        "wires": [
+            [
+                "58adef30d20c46c9"
+            ]
+        ]
+    },
+    {
+        "id": "58adef30d20c46c9",
+        "type": "http request",
+        "z": "89825a0049521b38",
+        "name": "",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 240,
+        "wires": [
+            [
+                "3fa9d75424b64ae4"
+            ]
+        ]
+    },
+    {
+        "id": "3fa9d75424b64ae4",
+        "type": "ui-table",
+        "z": "89825a0049521b38",
+        "group": "c2965404f06022d6",
+        "name": "Meldung sichten - Table",
         "label": "",
         "order": 1,
         "width": 0,
         "height": 0,
-        "options": [
-            {
-                "label": "Beschreibung",
-                "key": "Hallo",
-                "type": "text",
-                "required": true,
-                "rows": null
-            }
-        ],
-        "formValue": {
-            "Hallo": ""
-        },
-        "payload": "",
-        "submit": "Absenden",
-        "cancel": "Löschen",
-        "resetOnSubmit": true,
-        "topic": "topic",
-        "topicType": "msg",
-        "splitLayout": "",
-        "className": "",
+        "maxrows": 0,
         "passthru": false,
-        "dropdownOptions": [],
-        "x": 400,
-        "y": 180,
+        "autocols": true,
+        "showSearch": true,
+        "deselect": true,
+        "selectionType": "click",
+        "columns": [],
+        "mobileBreakpoint": "sm",
+        "mobileBreakpointType": "defaults",
+        "action": "replace",
+        "className": "",
+        "x": 830,
+        "y": 240,
+        "wires": [
+            [
+                "bc9591cd8622b848",
+                "47458af47e8faac5"
+            ]
+        ]
+    },
+    {
+        "id": "7b60f4b9e27987f7",
+        "type": "ui-event",
+        "z": "89825a0049521b38",
+        "ui": "74fddf0e9298beb9",
+        "name": "",
+        "x": 130,
+        "y": 320,
+        "wires": [
+            [
+                "b9152c0be0023ef5"
+            ]
+        ]
+    },
+    {
+        "id": "bc9591cd8622b848",
+        "type": "function",
+        "z": "89825a0049521b38",
+        "name": "function 3",
+        "func": "const m = msg.payload;\nconst selected = flow.set(m);\nmsg.payload = \n    m.description;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 400,
+        "wires": [
+            [
+                "dcfd6f5032a35659"
+            ]
+        ]
+    },
+    {
+        "id": "2f0e9052afe257b4",
+        "type": "function",
+        "z": "89825a0049521b38",
+        "name": "function 4",
+        "func": "let selected = flow.get(\"selected\");\nif (!selected) {\n    node.warn(\"Keine Meldung ausgewählt!\");\n    return null;\n}\n\nmsg.method = \"DELETE\";\nmsg.url = \"http://localhost:8000/messages/\" + selected.id;\nmsg.payload = {};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 520,
+        "wires": [
+            [
+                "28956bc620700e14"
+            ]
+        ]
+    },
+    {
+        "id": "28956bc620700e14",
+        "type": "http request",
+        "z": "89825a0049521b38",
+        "name": "",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 690,
+        "y": 520,
+        "wires": [
+            [
+                "b9ccc1b55fc2686f"
+            ]
+        ]
+    },
+    {
+        "id": "b9ccc1b55fc2686f",
+        "type": "function",
+        "z": "89825a0049521b38",
+        "name": "function 5",
+        "func": "msg.payload = \"\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 880,
+        "y": 520,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "d924ebe04dfcb040",
+        "type": "ui-button",
+        "z": "89825a0049521b38",
+        "group": "c2965404f06022d6",
+        "name": "Löschen",
+        "label": "Löschen",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 280,
+        "y": 520,
+        "wires": [
+            [
+                "2f0e9052afe257b4"
+            ]
+        ]
+    },
+    {
+        "id": "2c72ba2097ae6d08",
+        "type": "ui-button",
+        "z": "89825a0049521b38",
+        "group": "c2965404f06022d6",
+        "name": "Akktualisieren",
+        "label": "Akktualisieren",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 120,
+        "y": 240,
+        "wires": [
+            [
+                "b9152c0be0023ef5"
+            ]
+        ]
+    },
+    {
+        "id": "47458af47e8faac5",
+        "type": "debug",
+        "z": "89825a0049521b38",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1120,
+        "y": 100,
+        "wires": []
     }
 ]
