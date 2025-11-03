@@ -1,0 +1,335 @@
+[
+    {
+        "id": "b6c49126b53c3f19",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "89825a0049521b38",
+        "type": "tab",
+        "label": "Flow 5",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "74fddf0e9298beb9",
+        "type": "ui-base",
+        "name": "My Dashboard",
+        "path": "/dashboard",
+        "appIcon": "",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-notification",
+            "ui-control"
+        ],
+        "showPathInSidebar": false,
+        "headerContent": "page",
+        "navigationStyle": "default",
+        "titleBarStyle": "default",
+        "showReconnectNotification": true,
+        "notificationDisplayTime": 1,
+        "showDisconnectNotification": true,
+        "allowInstall": false
+    },
+    {
+        "id": "302e3287f635dd2e",
+        "type": "ui-theme",
+        "name": "Default Theme",
+        "colors": {
+            "surface": "#ffffff",
+            "primary": "#0094CE",
+            "bgPage": "#eeeeee",
+            "groupBg": "#ffffff",
+            "groupOutline": "#cccccc"
+        },
+        "sizes": {
+            "density": "default",
+            "pagePadding": "12px",
+            "groupGap": "12px",
+            "groupBorderRadius": "4px",
+            "widgetGap": "12px"
+        }
+    },
+    {
+        "id": "53322e71394a01b8",
+        "type": "ui-page",
+        "name": "add",
+        "ui": "74fddf0e9298beb9",
+        "path": "/add",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "302e3287f635dd2e",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 2,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "b4e4776019c59a5c",
+        "type": "ui-group",
+        "name": "Meldung_erstellen",
+        "page": "53322e71394a01b8",
+        "width": 6,
+        "height": 1,
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "439b1ef45daa8130",
+        "type": "ui-page",
+        "name": "view",
+        "ui": "74fddf0e9298beb9",
+        "path": "/view",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "302e3287f635dd2e",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 1,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "8cfee7582093513a",
+        "type": "ui-group",
+        "name": "Sichten",
+        "page": "439b1ef45daa8130",
+        "width": 6,
+        "height": 1,
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "dc45cb42a22584e0",
+        "type": "ui-form",
+        "z": "b6c49126b53c3f19",
+        "name": "Meldung erstellen !",
+        "group": "b4e4776019c59a5c",
+        "label": "",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Titel",
+                "key": "Titel_Eingabe",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "ID",
+                "key": "ID_Eingabe",
+                "type": "text",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Art des Problems",
+                "key": "Problem_Eingabe",
+                "type": "dropdown",
+                "required": true,
+                "rows": null
+            },
+            {
+                "label": "Beschreibung",
+                "key": "Desc_Eingabe",
+                "type": "multiline",
+                "required": true,
+                "rows": 3
+            }
+        ],
+        "formValue": {
+            "Titel_Eingabe": "",
+            "ID_Eingabe": "",
+            "Problem_Eingabe": "",
+            "Desc_Eingabe": ""
+        },
+        "payload": "",
+        "submit": "Absenden",
+        "cancel": "Löschen",
+        "resetOnSubmit": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "passthru": false,
+        "dropdownOptions": [
+            {
+                "dropdown": "Problem_Eingabe",
+                "value": "defect",
+                "label": "Störung"
+            },
+            {
+                "dropdown": "Problem_Eingabe",
+                "value": "info",
+                "label": "Information"
+            },
+            {
+                "dropdown": "Problem_Eingabe",
+                "value": "idea",
+                "label": "Idee"
+            }
+        ],
+        "x": 310,
+        "y": 180,
+        "wires": [
+            [
+                "1b90d5f8ba36fa62"
+            ]
+        ]
+    },
+    {
+        "id": "1b90d5f8ba36fa62",
+        "type": "function",
+        "z": "b6c49126b53c3f19",
+        "name": "function 1",
+        "func": "msg.payload = {\n    title: msg.payload.Titel_Eingabe,\n    id: msg.payload.ID_Eingabe,\n    problemType: msg.payload.Problem_Eingabe,\n    description: msg.payload.Desc_Eingabe\n};\n\n// Die HTTP-Anfrage vorbereiten\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nmsg.url = \"http://localhost:8000/add-message\";  // Ziel-URL \nmsg.method = \"POST\";  // HTTP-Methode POST\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 180,
+        "wires": [
+            [
+                "2d93b0f407df5e68"
+            ]
+        ]
+    },
+    {
+        "id": "2d93b0f407df5e68",
+        "type": "http request",
+        "z": "b6c49126b53c3f19",
+        "name": "",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 770,
+        "y": 180,
+        "wires": [
+            [
+                "2ddb3a7e48c2f8cc"
+            ]
+        ]
+    },
+    {
+        "id": "2ddb3a7e48c2f8cc",
+        "type": "debug",
+        "z": "b6c49126b53c3f19",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1000,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "6a5736d42f3b5252",
+        "type": "ui-form",
+        "z": "89825a0049521b38",
+        "name": "Sichten !",
+        "group": "8cfee7582093513a",
+        "label": "",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "Beschreibung",
+                "key": "Hallo",
+                "type": "text",
+                "required": true,
+                "rows": null
+            }
+        ],
+        "formValue": {
+            "Hallo": ""
+        },
+        "payload": "",
+        "submit": "Absenden",
+        "cancel": "Löschen",
+        "resetOnSubmit": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "splitLayout": "",
+        "className": "",
+        "passthru": false,
+        "dropdownOptions": [],
+        "x": 400,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    }
+]
