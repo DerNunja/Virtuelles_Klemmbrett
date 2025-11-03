@@ -4,7 +4,7 @@ const fs = require("fs");
 
 app.use(express.json());
 
-// Verfügbarkeits-Route
+// health check up
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
 // Meldung speichern
@@ -45,6 +45,45 @@ app.post("/add-message", (req, res) => {
                 return res.status(500).json({ error: "Fehler beim Speichern der Meldung." });
             }
             res.status(200).json({ success: "Meldung erfolgreich gespeichert!" });
+        });
+    });
+});
+
+
+app.get("/messages", (req, res) => {
+    fs.readFile("messages.json", "utf8", (err, data) => {
+        if (err) return res.status(500).json({ error: "Fehler beim Lesen der Datei." });
+
+        let messages = [];
+        try {
+            messages = JSON.parse(data || "[]");
+        } catch (e) {
+            return res.status(500).json({ error: "Fehler beim Parsen der Daten." });
+        }
+
+        res.json(messages);
+    });
+});
+
+// Meldung löschen
+app.delete("/messages/:id", (req, res) => {
+    const idToDelete = req.params.id;
+
+    fs.readFile("messages.json", "utf8", (err, data) => {
+        if (err) return res.status(500).json({ error: "Fehler beim Lesen der Datei." });
+
+        let messages = [];
+        try {
+            messages = JSON.parse(data || "[]");
+        } catch (e) {
+            return res.status(500).json({ error: "Fehler beim Parsen der Daten." });
+        }
+
+        const updated = messages.filter((msg) => msg.id !== idToDelete);
+
+        fs.writeFile("messages.json", JSON.stringify(updated, null, 2), (writeErr) => {
+            if (writeErr) return res.status(500).json({ error: "Fehler beim Speichern." });
+            res.json({ success: true });
         });
     });
 });
