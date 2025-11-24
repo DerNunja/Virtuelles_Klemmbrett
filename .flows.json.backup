@@ -182,7 +182,7 @@
         "name": "machine",
         "ui": "74fddf0e9298beb9",
         "path": "/machine",
-        "icon": "settings",
+        "icon": "",
         "layout": "grid",
         "theme": "302e3287f635dd2e",
         "breakpoints": [
