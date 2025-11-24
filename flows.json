@@ -3,7 +3,7 @@
         "id": "b6c49126b53c3f19",
         "type": "tab",
         "label": "MeldungErstellen",
-        "disabled": false,
+        "disabled": true,
         "info": "",
         "env": []
     },
@@ -11,7 +11,7 @@
         "id": "89825a0049521b38",
         "type": "tab",
         "label": "MeldungSichten",
-        "disabled": false,
+        "disabled": true,
         "info": "",
         "env": []
     },
@@ -19,6 +19,14 @@
         "id": "8149379c027f98bb",
         "type": "tab",
         "label": "MachineView",
+        "disabled": true,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "034854d55127abb7",
+        "type": "tab",
+        "label": "Flow 1",
         "disabled": false,
         "info": "",
         "env": []
@@ -1085,8 +1093,8 @@
         "offvalueType": "str",
         "officon": "",
         "offcolor": "",
-        "x": 780,
-        "y": 780,
+        "x": 200,
+        "y": 180,
         "wires": [
             [
                 "bada55f00d123456"
@@ -1112,10 +1120,6 @@
         "from": "",
         "to": "",
         "reg": false,
-<<<<<<< Updated upstream
-        "x": 1010,
-        "y": 780,
-=======
         "x": 500,
         "y": 100,
         "wires": [
@@ -1308,7 +1312,6 @@
         "interpolation": "linear",
         "x": 1080,
         "y": 300,
->>>>>>> Stashed changes
         "wires": [
             []
         ]
@@ -1590,5 +1593,64 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "8987613396544ac8",
+        "type": "tcp in",
+        "z": "034854d55127abb7",
+        "name": "",
+        "server": "server",
+        "host": "",
+        "port": "8000",
+        "datamode": "stream",
+        "datatype": "buffer",
+        "newline": "",
+        "topic": "",
+        "trim": false,
+        "base64": false,
+        "tls": "",
+        "x": 160,
+        "y": 240,
+        "wires": [
+            [
+                "f1f6eca.4b6aa1"
+            ]
+        ]
+    },
+    {
+        "id": "f1f6eca.4b6aa1",
+        "type": "function",
+        "z": "034854d55127abb7",
+        "name": "BeAPart2JS",
+        "func": "let pos = 0;\nlet buffer = msg.payload;\n\n/* Hardest hit is the left shift. It is not! positive int and yields to an overrun\n * Instead using left shift, we need to use Math.pow!\n */\n\nfunction readInt()\n{\n    let a = buffer[3+pos];\n    let b = buffer[2+pos];\n    let c = buffer[1+pos];\n    let d = buffer[pos];\n\n    let res = a * Math.pow(2,24) +\n        b * Math.pow(2,16) +\n        c * Math.pow(2,8) +\n        d;\n\n    pos += 4;\n\n    return res;\n}\n\nfunction readLong()\n{\n    let a = readInt();\n    let b = readInt();\n    return b * Math.pow(2,32) + a;\n}\n\nfunction readString()\n{\n    let len = buffer[pos];\n    pos++;\n    let cpy = buffer.slice(pos, pos+len);\n    pos+=len;\n    return String.fromCharCode(...cpy);\n}\n\n\nlet eid = readString();\nlet numEvents = readInt();\nlet numMeasures = readInt();\nlet now = readLong();\n\nlet events = [];\nlet measures = [];\nfor (let i = 0; i < numEvents;i++)\n{\n    events.push(readInt());\n}\n\nfor (let i = 0; i < numMeasures;i++)\n{\n    let name = readString();\n    let val  = readInt();\n    measures.push({\n        name: name,\n        value: val\n    });\n}\n\n\nmsg.payload = {name: msg.topic, eid: eid, date: now, events: events, measures: measures};\n\n\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 240,
+        "wires": [
+            [
+                "4f63af54dacdc63c"
+            ]
+        ]
+    },
+    {
+        "id": "4f63af54dacdc63c",
+        "type": "debug",
+        "z": "034854d55127abb7",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 240,
+        "wires": []
     }
 ]

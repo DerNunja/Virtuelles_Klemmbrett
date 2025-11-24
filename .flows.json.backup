@@ -209,8 +209,8 @@
         ],
         "order": 3,
         "className": "",
-        "visible": "true",
-        "disabled": "false"
+        "visible": true,
+        "disabled": false
     },
     {
         "id": "6a8a3a5f0b7f4e2b",
@@ -288,6 +288,18 @@
         "willTopic": "",
         "willQos": "0",
         "willPayload": ""
+    },
+    {
+        "id": "439bc5fe93132122",
+        "type": "OpcUa-Endpoint",
+        "endpoint": "opc.tcp://172.23.193.10:4840",
+        "secpol": "None",
+        "secmode": "None",
+        "none": true,
+        "login": false,
+        "usercert": false,
+        "usercertificate": "",
+        "userprivatekey": ""
     },
     {
         "id": "dc45cb42a22584e0",
@@ -449,8 +461,8 @@
         "className": "",
         "value": "payload",
         "valueType": "msg",
-        "x": 1130,
-        "y": 400,
+        "x": 1290,
+        "y": 340,
         "wires": []
     },
     {
@@ -518,7 +530,7 @@
         "mobileBreakpointType": "defaults",
         "action": "replace",
         "className": "",
-        "x": 870,
+        "x": 890,
         "y": 240,
         "wires": [
             [
@@ -533,8 +545,8 @@
         "z": "89825a0049521b38",
         "ui": "74fddf0e9298beb9",
         "name": "",
-        "x": 170,
-        "y": 160,
+        "x": 130,
+        "y": 140,
         "wires": [
             [
                 "b9152c0be0023ef5"
@@ -545,19 +557,20 @@
         "id": "bc9591cd8622b848",
         "type": "function",
         "z": "89825a0049521b38",
-        "name": "function 3",
-        "func": "const row = msg.payload || {};\nconst full = flow.get(\"messages_full\") || [];\nconst selected = full.find(m => String(m.id) === String(row.id));\n\nif (!selected) {\n  node.warn(\"Keine vollständige Meldung zum Eintrag gefunden.\");\n  return null;\n}\n\nflow.set(\"selected\", selected);         // für Löschen usw.\nmsg.payload = selected.description || \"\"; \nreturn msg;",
+        "name": "Get Selected",
+        "func": "const row = msg.payload || {};\nconst full = flow.get(\"messages_full\") || [];\nconst selected = full.find(m => String(m.id) === String(row.id));\n\nif (!selected) {\n  node.warn(\"Keine vollständige Meldung zum Eintrag gefunden.\");\n  return [null, null];\n}\n\n// Speichere Meldung für MachineView\nflow.set(\"activeMessage\", selected);\n\n// Output 1 Beschreibung aktualisieren\nconst out1 = { payload: selected.description || \"\" };\n\nreturn [out1]",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 960,
+        "x": 990,
         "y": 400,
         "wires": [
             [
-                "dcfd6f5032a35659"
+                "dcfd6f5032a35659",
+                "53f26d1519ea249d"
             ]
         ]
     },
@@ -573,8 +586,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 500,
-        "y": 520,
+        "x": 320,
+        "y": 400,
         "wires": [
             [
                 "28956bc620700e14"
@@ -597,8 +610,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 690,
-        "y": 520,
+        "x": 510,
+        "y": 400,
         "wires": [
             [
                 "b9ccc1b55fc2686f",
@@ -618,8 +631,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 880,
-        "y": 520,
+        "x": 700,
+        "y": 400,
         "wires": [
             []
         ]
@@ -655,8 +668,8 @@
         "enablePointerup": false,
         "pointerupPayload": "",
         "pointerupPayloadType": "str",
-        "x": 280,
-        "y": 520,
+        "x": 100,
+        "y": 400,
         "wires": [
             [
                 "2f0e9052afe257b4"
@@ -739,25 +752,313 @@
         ]
     },
     {
-        "id": "5d7f1e0b4a6c9d21",
-        "type": "mqtt in",
-        "z": "8149379c027f98bb",
-        "name": "MQTT In: factory/machine1/telemetry",
-        "topic": "factory/machine1/telemetry",
-        "qos": "1",
-        "datatype": "auto",
-        "broker": "mqtt-broker-01",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 250,
-        "y": 160,
+        "id": "047952d3ada125ba",
+        "type": "OpcUa-Client",
+        "z": "89825a0049521b38",
+        "endpoint": "439bc5fe93132122",
+        "action": "subscribe",
+        "deadbandtype": "a",
+        "deadbandvalue": 1,
+        "time": 10,
+        "timeUnit": "s",
+        "certificate": "n",
+        "localfile": "",
+        "localkeyfile": "",
+        "securitymode": "None",
+        "securitypolicy": "None",
+        "useTransport": false,
+        "maxChunkCount": 1,
+        "maxMessageSize": 8192,
+        "receiveBufferSize": 8192,
+        "sendBufferSize": 8192,
+        "setstatusandtime": false,
+        "keepsessionalive": false,
+        "name": "",
+        "applicationName": "",
+        "applicationUri": "",
+        "x": 1100,
+        "y": 580,
         "wires": [
             [
-                "0c2b3a1d5e6f7a8b"
+                "cd8a77a09e79d380",
+                "18e06d8bcb866038"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "d22762d931dbd5c9",
+        "type": "OpcUa-Item",
+        "z": "89825a0049521b38",
+        "item": "ns=3;s=\"Leistung\"",
+        "datatype": "Int16",
+        "value": "",
+        "name": "",
+        "x": 860,
+        "y": 580,
+        "wires": [
+            [
+                "047952d3ada125ba"
             ]
         ]
+    },
+    {
+        "id": "cd8a77a09e79d380",
+        "type": "debug",
+        "z": "89825a0049521b38",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1360,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "bd11d89626e7f569",
+        "type": "inject",
+        "z": "89825a0049521b38",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 600,
+        "y": 580,
+        "wires": [
+            [
+                "d22762d931dbd5c9",
+                "dynamic-opc-ua-selector"
+            ]
+        ]
+    },
+    {
+        "id": "18e06d8bcb866038",
+        "type": "ui-chart",
+        "z": "89825a0049521b38",
+        "group": "a1b2c3d4e5f6a7b8",
+        "name": "",
+        "label": "Test",
+        "order": 2,
+        "chartType": "line",
+        "category": "topic",
+        "categoryType": "msg",
+        "xAxisLabel": "",
+        "xAxisProperty": "",
+        "xAxisPropertyType": "timestamp",
+        "xAxisType": "time",
+        "xAxisFormat": "",
+        "xAxisFormatType": "auto",
+        "xmin": "",
+        "xmax": "",
+        "yAxisLabel": "",
+        "yAxisProperty": "payload",
+        "yAxisPropertyType": "msg",
+        "ymin": "",
+        "ymax": "1000",
+        "bins": 10,
+        "action": "append",
+        "stackSeries": false,
+        "pointShape": "circle",
+        "pointRadius": 4,
+        "showLegend": true,
+        "removeOlder": 1,
+        "removeOlderUnit": "3600",
+        "removeOlderPoints": "",
+        "colors": [
+            "#0095ff",
+            "#ff0000",
+            "#ff7f0e",
+            "#2ca02c",
+            "#a347e1",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "textColor": [
+            "#666666"
+        ],
+        "textColorDefault": true,
+        "gridColor": [
+            "#e5e5e5"
+        ],
+        "gridColorDefault": true,
+        "width": 6,
+        "height": 8,
+        "className": "",
+        "interpolation": "linear",
+        "x": 1370,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dynamic-opc-ua-selector",
+        "type": "function",
+        "z": "89825a0049521b38",
+        "name": "OPC UA Node dynamisch nach ID auswählen",
+        "func": "// Vom Selected-Event: activeMessage aus Flow holen\nconst msgData = flow.get(\"activeMessage\");\nif (!msgData || !msgData.id) {\n    node.warn(\"Keine aktive Meldung vorhanden!\");\n    return null;\n}\n\n// ID aus Meldung → Bauteil-ID\nconst id = msgData.id;\n\n// Dynamische OPC-UA NodeId definieren\n//msg.topic = `ns=3;s=\"${id}\"`;\n\n// Für UI Anzeige\nmsg.topic = \"multiple\"\nmsg.payload = { nodeId: `ns=3;s=\"${id}\"`, datatype: \"Int16\"}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 760,
+        "wires": [
+            [
+                "opcua-client-dynamic",
+                "0ccdb36b27df4b6e"
+            ]
+        ]
+    },
+    {
+        "id": "opcua-client-dynamic",
+        "type": "OpcUa-Client",
+        "z": "89825a0049521b38",
+        "endpoint": "439bc5fe93132122",
+        "action": "subscribe",
+        "deadbandtype": "a",
+        "deadbandvalue": 1,
+        "time": 1,
+        "timeUnit": "s",
+        "localfile": "",
+        "localkeyfile": "",
+        "useTransport": false,
+        "maxChunkCount": "",
+        "maxMessageSize": "",
+        "receiveBufferSize": "",
+        "sendBufferSize": "",
+        "setstatusandtime": false,
+        "keepsessionalive": false,
+        "name": "Dynamic OPC UA Client",
+        "applicationName": "",
+        "applicationUri": "",
+        "x": 1250,
+        "y": 760,
+        "wires": [
+            [
+                "9b40f620b0380b6f",
+                "0ccdb36b27df4b6e"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "9b40f620b0380b6f",
+        "type": "ui-chart",
+        "z": "89825a0049521b38",
+        "group": "c2965404f06022d6",
+        "name": "",
+        "label": "chart",
+        "order": 9007199254740991,
+        "chartType": "line",
+        "category": "topic",
+        "categoryType": "msg",
+        "xAxisLabel": "",
+        "xAxisProperty": "",
+        "xAxisPropertyType": "timestamp",
+        "xAxisType": "time",
+        "xAxisFormat": "",
+        "xAxisFormatType": "auto",
+        "xmin": "",
+        "xmax": "",
+        "yAxisLabel": "",
+        "yAxisProperty": "payload",
+        "yAxisPropertyType": "msg",
+        "ymin": "",
+        "ymax": "",
+        "bins": 10,
+        "action": "append",
+        "stackSeries": false,
+        "pointShape": "circle",
+        "pointRadius": 4,
+        "showLegend": true,
+        "removeOlder": 1,
+        "removeOlderUnit": "3600",
+        "removeOlderPoints": "",
+        "colors": [
+            "#0095ff",
+            "#ff0000",
+            "#ff7f0e",
+            "#2ca02c",
+            "#a347e1",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "textColor": [
+            "#666666"
+        ],
+        "textColorDefault": true,
+        "gridColor": [
+            "#e5e5e5"
+        ],
+        "gridColorDefault": true,
+        "width": 6,
+        "height": 8,
+        "className": "",
+        "interpolation": "linear",
+        "x": 1610,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0ccdb36b27df4b6e",
+        "type": "debug",
+        "z": "89825a0049521b38",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1460,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "53f26d1519ea249d",
+        "type": "debug",
+        "z": "89825a0049521b38",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1280,
+        "y": 220,
+        "wires": []
     },
     {
         "id": "c0ffee1122334455",
@@ -770,10 +1071,22 @@
         "width": 6,
         "height": 1,
         "passthru": true,
-        "decouple": "false",
+        "decouple": false,
         "topic": "ui/pause",
-        "x": 250,
-        "y": 100,
+        "topicType": "str",
+        "className": "",
+        "layout": "",
+        "clickableArea": "switch",
+        "onvalue": "",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "x": 780,
+        "y": 780,
         "wires": [
             [
                 "bada55f00d123456"
@@ -839,7 +1152,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 830,
+        "x": 860,
         "y": 220,
         "wires": [
             [
@@ -867,7 +1180,7 @@
         "className": "",
         "value": "payload",
         "valueType": "msg",
-        "x": 1060,
+        "x": 1090,
         "y": 220,
         "wires": []
     },
@@ -944,14 +1257,51 @@
         "label": "Historie",
         "order": 1,
         "chartType": "line",
+        "category": "",
+        "categoryType": "msg",
+        "xAxisLabel": "",
+        "xAxisProperty": "",
+        "xAxisPropertyType": "timestamp",
+        "xAxisType": "time",
+        "xAxisFormat": "",
+        "xAxisFormatType": "auto",
+        "xmin": "",
+        "xmax": "",
+        "yAxisLabel": "",
+        "yAxisProperty": "",
+        "yAxisPropertyType": "property",
         "ymin": "",
         "ymax": "",
+        "bins": "",
+        "stackSeries": false,
+        "pointRadius": "",
+        "showLegend": true,
         "removeOlder": "6",
         "removeOlderUnit": "60",
         "removeOlderPoints": "",
-        "colors": [],
+        "colors": [
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000",
+            "#000000"
+        ],
+        "textColor": [
+            "#666666"
+        ],
+        "textColorDefault": true,
+        "gridColor": [
+            "#e5e5e5"
+        ],
+        "gridColorDefault": true,
         "width": 12,
         "height": 6,
+        "className": "",
+        "interpolation": "linear",
         "x": 1080,
         "y": 300,
         "wires": [
@@ -969,8 +1319,25 @@
         "width": 6,
         "height": 1,
         "emulateClick": false,
-        "x": 810,
-        "y": 260,
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 830,
+        "y": 720,
         "wires": [
             [
                 "beadedcab005e5e5"
@@ -996,8 +1363,225 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1080,
-        "y": 260,
+        "x": 1130,
+        "y": 720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bf605edd2b947475",
+        "type": "function",
+        "z": "8149379c027f98bb",
+        "name": "Nach Meldung filtern",
+        "func": "const active = flow.get(\"activeMessage\");\n\nif (!active) {\n    return msg;\n}\n\n// Beispiel: Meldung problemType=\"defect\" → besondere Analyse\nmsg.activeMessage = active;\n\nmsg.payload.activeMessage = active;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "show-selected-bauteil",
+        "type": "ui-text",
+        "z": "8149379c027f98bb",
+        "group": "6a8a3a5f0b7f4e2b",
+        "order": 2,
+        "width": "",
+        "height": "",
+        "name": "Bauteil Anzeige",
+        "label": "Ausgewähltes Bauteil",
+        "format": "{{msg.payload.title}} (ID: {{msg.payload.selectedId}})",
+        "layout": "row-left",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "wrapText": false,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 1020,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "Parse-MV",
+        "type": "function",
+        "z": "8149379c027f98bb",
+        "name": "Parse Telemetrie",
+        "func": "let obj = msg.payload;\ntry {\n    if (typeof obj === 'string') obj = JSON.parse(obj);\n} catch {}\nmsg.telemetry = obj;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 460,
+        "wires": [
+            [
+                "MV-Live-Format",
+                "MV-KPIs",
+                "MV-History"
+            ]
+        ]
+    },
+    {
+        "id": "Filter-MV-By-ID",
+        "type": "function",
+        "z": "8149379c027f98bb",
+        "name": "Nur Telemetrie vom aktiven Bauteil",
+        "func": "const active = flow.get(\"activeMessage\");\nif (!active) return msg;\nmsg.active = active;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "MV-Live-Format",
+        "type": "function",
+        "z": "8149379c027f98bb",
+        "name": "Live Werte formatieren",
+        "func": "const t = msg.telemetry;\nmsg.payload = JSON.stringify(t);\nreturn msg;",
+        "outputs": 1,
+        "x": 660,
+        "y": 380,
+        "wires": [
+            [
+                "MV-Live-UI"
+            ]
+        ]
+    },
+    {
+        "id": "MV-Live-UI",
+        "type": "ui-text",
+        "z": "8149379c027f98bb",
+        "group": "2a1a2c3d4e5f6789",
+        "order": 1,
+        "name": "MachineView Live Telemetrie",
+        "label": "Telemetrie",
+        "format": "{{msg.payload}}",
+        "x": 980,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "MV-KPIs",
+        "type": "function",
+        "z": "8149379c027f98bb",
+        "name": "KPIs berechnen",
+        "func": "const t = msg.telemetry;\nconst k = flow.get(\"kpi\") || {good:0, bad:0};\nif (t.good) k.good += t.good;\nif (t.bad) k.bad += t.bad;\nk.total = k.good + k.bad;\nk.rate = k.total ? k.bad/k.total : 0;\nflow.set(\"kpi\", k);\nmsg.payload = `Gut: ${k.good} | Schlecht: ${k.bad} | Quote: ${(k.rate*100).toFixed(1)}%`;\nreturn msg;",
+        "outputs": 1,
+        "x": 780,
+        "y": 600,
+        "wires": [
+            [
+                "MV-Analyse"
+            ]
+        ]
+    },
+    {
+        "id": "MV-Analyse",
+        "type": "ui-text",
+        "z": "8149379c027f98bb",
+        "group": "f1b2c3d4e5f60718",
+        "order": 1,
+        "name": "Analyse",
+        "label": "Analyse",
+        "format": "{{msg.payload}}",
+        "x": 1000,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "MV-History",
+        "type": "function",
+        "z": "8149379c027f98bb",
+        "name": "Historie",
+        "func": "const t = msg.telemetry;\nconst ts = new Date();\nmsg.payload = [\n    {series:\"temp\", x: ts, y: t.temperature},\n    {series:\"vib\", x: ts, y: t.vibration}\n];\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 640,
+        "wires": [
+            [
+                "MV-History-Chart"
+            ]
+        ]
+    },
+    {
+        "id": "MV-History-Chart",
+        "type": "ui-chart",
+        "z": "8149379c027f98bb",
+        "group": "a1b2c3d4e5f6a7b8",
+        "name": "",
+        "label": "Historie",
+        "order": 1,
+        "chartType": "line",
+        "category": "",
+        "categoryType": "msg",
+        "xAxisLabel": "",
+        "xAxisProperty": "",
+        "xAxisPropertyType": "timestamp",
+        "xAxisType": "time",
+        "xAxisFormat": "",
+        "xAxisFormatType": "auto",
+        "xmin": "",
+        "xmax": "",
+        "yAxisLabel": "",
+        "yAxisProperty": "",
+        "yAxisPropertyType": "property",
+        "ymin": "",
+        "ymax": "",
+        "bins": "",
+        "stackSeries": false,
+        "pointRadius": "",
+        "showLegend": true,
+        "removeOlder": "",
+        "removeOlderPoints": "",
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "textColor": [
+            "#666666"
+        ],
+        "textColorDefault": true,
+        "gridColor": [
+            "#e5e5e5"
+        ],
+        "gridColorDefault": true,
+        "width": "",
+        "height": "",
+        "className": "",
+        "interpolation": "linear",
+        "x": 1000,
+        "y": 640,
         "wires": [
             []
         ]
